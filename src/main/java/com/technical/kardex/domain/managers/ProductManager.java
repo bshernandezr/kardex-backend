@@ -1,5 +1,6 @@
 package com.technical.kardex.domain.managers;
 
+import com.technical.kardex.domain.dto.ProductInformation;
 import com.technical.kardex.domain.exception.InvalidStockException;
 import com.technical.kardex.domain.exception.ProductAlreadyCreatedException;
 import com.technical.kardex.domain.exception.ProductNotFoundException;
@@ -12,10 +13,12 @@ public interface ProductManager {
 
     void addStockToProduct(StockUpdateRequest stockUpdateRequest) throws ProductNotFoundException, InvalidStockException;
     void updateTotalStockProduct(StockUpdateRequest stockUpdateRequest) throws ProductNotFoundException, InvalidStockException;
-    void createProduct(Product product) throws ProductAlreadyCreatedException;
+    void createProduct(ProductInformation product) throws ProductAlreadyCreatedException;
     Product getProductById(long productId) throws ProductNotFoundException;
     PageableEntity<Product> getListOfProducts(int currentPage, int hitsPerPage);
-    void updateProduct(Product product) throws InvalidStockException;
+
+    void updateProduct(ProductInformation product) throws InvalidStockException, ProductNotFoundException;
+
     void deleteProduct(long productId) throws ProductNotFoundException;
 
 

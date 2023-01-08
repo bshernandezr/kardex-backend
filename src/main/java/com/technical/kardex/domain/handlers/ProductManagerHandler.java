@@ -1,5 +1,6 @@
 package com.technical.kardex.domain.handlers;
 
+import com.technical.kardex.domain.dto.ProductInformation;
 import com.technical.kardex.domain.exception.InvalidStockException;
 import com.technical.kardex.domain.exception.ProductAlreadyCreatedException;
 import com.technical.kardex.domain.exception.ProductNotFoundException;
@@ -11,7 +12,6 @@ import com.technical.kardex.infrastructure.repository.ProductRepository;
 import com.technical.kardex.infrastructure.repository.ProductStockHistoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -52,12 +52,12 @@ public class ProductManagerHandler implements ProductManager {
     }
 
     @Override
-    public void createProduct(Product product) throws ProductAlreadyCreatedException {
+    public void createProduct(ProductInformation product) throws ProductAlreadyCreatedException {
         Optional<Product> optionalProduct = productRepository.findById(product.getId());
         if(optionalProduct.isPresent())
             throw new ProductAlreadyCreatedException();
         product.setStock(Math.abs(product.getStock()));
-        productRepository.save(product);
+        productRepository.save(product.toEntity());
     }
 
     @Override
@@ -78,8 +78,11 @@ public class ProductManagerHandler implements ProductManager {
     }
 
     @Override
-    public void updateProduct(Product product) throws InvalidStockException {
-        validateStock(product);
+    public void updateProduct(ProductInformation product) throws InvalidStockException, ProductNotFoundException {
+        Optional<Product> optionalProduct = productRepository.findById(product.getId());
+        optionalProduct.orElseThrow(() -> new ProductNotFoundException());
+        validateStock(product.toEntity());
+        productRepository.save(product.toEntity());
     }
 
     @Override
