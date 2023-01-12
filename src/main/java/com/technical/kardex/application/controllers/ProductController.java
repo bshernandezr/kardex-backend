@@ -22,6 +22,7 @@ import javax.validation.Valid;
 
 @Controller
 @RequestMapping("api/v1/product")
+@CrossOrigin
 public class ProductController {
 
     private final ProductManager productManager;
