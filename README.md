@@ -6,9 +6,9 @@ Corre por defecto en el puerto 8080
 
 Para correr el proyecto:
 
-'''
+```
 mvn spring-boot:run
-'''
+```
 
 Para generar jar
 
